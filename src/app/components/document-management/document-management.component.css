@@ -1,0 +1,374 @@
+/* src/app/components/document-management/document-management.component.css */
+
+.document-management-container {
+  padding: 30px;
+  background: #f8f9fa;
+  min-height: 100vh;
+}
+
+.document-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  background: white;
+  padding: 20px 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.document-header h2 {
+  margin: 0;
+  color: #2d3748;
+  font-weight: 700;
+  font-size: 28px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.new-document-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.new-document-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+}
+
+/* Filters Section */
+.filters-section {
+  background: white;
+  padding: 20px 30px;
+  border-radius: 12px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.filters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  align-items: end;
+}
+
+.filter-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.filter-item label {
+  font-weight: 600;
+  color: #4a5568;
+  font-size: 14px;
+}
+
+.filter-select {
+  min-width: 200px;
+}
+
+/* Documents Grid Section */
+.documents-grid-section {
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.documents-grid {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.documents-grid ::ng-deep .dx-datagrid {
+  border: none;
+}
+
+.documents-grid ::ng-deep .dx-datagrid-headers {
+  background: #f1f3f4;
+  font-weight: 600;
+}
+
+.documents-grid ::ng-deep .dx-row {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.documents-grid ::ng-deep .dx-row:hover {
+  background-color: #f1f5f9 !important;
+}
+
+.documents-grid ::ng-deep .dx-selection {
+  background-color: rgba(102, 126, 234, 0.1) !important;
+  border-left: 4px solid #667eea;
+}
+
+/* Document Link Styling */
+.document-link {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.document-link:hover {
+  color: #5a6fd8;
+  text-decoration: underline;
+}
+
+/* Type Badges */
+.type-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.type-letter {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.type-memo {
+  background: #f3e5f5;
+  color: #7b1fa2;
+}
+
+.type-summary {
+  background: #e8f5e8;
+  color: #388e3c;
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.action-btn {
+  min-width: 60px;
+  font-size: 12px;
+  padding: 4px 8px;
+  height: 28px;
+}
+
+.review-btn {
+  background: #17a2b8;
+  color: white;
+}
+
+.edit-btn {
+  color: #667eea;
+}
+
+.view-btn {
+  color: #6c757d;
+}
+
+/* Form Styles */
+.new-document-form,
+.review-form {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-field label {
+  font-weight: 600;
+  color: #4a5568;
+  font-size: 14px;
+}
+
+.form-input {
+  width: 100%;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.cancel-btn {
+  background: #6c757d;
+  color: white;
+  border: none;
+}
+
+.create-btn,
+.submit-review-btn {
+  background: #667eea;
+  color: white;
+  border: none;
+}
+
+.submit-btn {
+  background: #28a745;
+  color: white;
+  border: none;
+}
+
+.complete-btn {
+  background: #17a2b8;
+  color: white;
+  border: none;
+}
+
+/* Review Form Specific */
+.review-document-info {
+  background: #f8f9fa;
+  padding: 16px;
+  border-radius: 8px;
+  border-left: 4px solid #667eea;
+}
+
+.review-document-info h4 {
+  margin: 0 0 8px 0;
+  color: #2d3748;
+  font-size: 16px;
+}
+
+.review-document-info p {
+  margin: 4px 0;
+  color: #6c757d;
+  font-size: 13px;
+}
+
+/* Document Viewer/Editor */
+.document-viewer {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.document-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e2e8f0;
+  border-radius: 8px 8px 0 0;
+}
+
+.document-info {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.doc-version {
+  background: #e2e8f0;
+  color: #4a5568;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.document-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.document-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  background: white;
+}
+
+.document-editor {
+  min-height: 500px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 30px;
+  background: white;
+  font-family: 'Times New Roman', serif;
+  font-size: 14px;
+  line-height: 1.6;
+  outline: none;
+}
+
+.document-editor:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .document-management-container {
+    padding: 20px;
+  }
+  
+  .document-header {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+  
+  .filters-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+  }
+  
+  .document-toolbar {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .documents-grid ::ng-deep .dx-datagrid-content {
+    overflow-x: auto;
+  }
+}
+
+/* Status-specific styling */
+.documents-grid ::ng-deep .dx-row[aria-rowindex] td:nth-child(6) {
+  font-weight: 500;
+}
+
+/* Popup styling overrides */
+.document-management-container ::ng-deep .dx-popup-content {
+  padding: 0;
+}
+
+.document-management-container ::ng-deep .dx-popup-title {
+  font-weight: 600;
+  color: #2d3748;
+}
+
+/* Print styles for documents */
+@media print {
+  .document-toolbar,
+  .document-actions {
+    display: none !important;
+  }
+  
+  .document-editor {
+    border: none;
+    box-shadow: none;
+    padding: 0;
+  }
+}

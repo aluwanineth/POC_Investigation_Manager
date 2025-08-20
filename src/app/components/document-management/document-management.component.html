@@ -1,0 +1,289 @@
+<!-- src/app/components/document-management/document-management.component.html -->
+<div class="document-management-container">
+  <div class="document-header">
+    <h2>Document Management</h2>
+    <div class="header-actions">
+      <dx-button
+        text="New Document"
+        type="default"
+        icon="plus"
+        (onClick)="openNewDocumentDialog()"
+        class="new-document-btn">
+      </dx-button>
+    </div>
+  </div>
+
+  <!-- Document Status Tracker -->
+  <app-document-status-tracker
+    [selectedDocument]="selectedDocument">
+  </app-document-status-tracker>
+
+  <!-- Documents Grid with built-in DevExtreme features -->
+  <div class="documents-grid-section">
+    <dx-data-grid
+      [dataSource]="documents"
+      [showBorders]="true"
+      [rowAlternationEnabled]="true"
+      [columnAutoWidth]="true"
+      [showRowLines]="true"
+      [selection]="{ mode: 'single' }"
+      [paging]="{ enabled: true, pageSize: 10 }"
+      [searchPanel]="{ visible: true, placeholder: 'Search documents...', width: 300 }"
+      [filterRow]="{ visible: true }"
+      [headerFilter]="{ visible: true }"
+      [groupPanel]="{ visible: true }"
+      [columnChooser]="{ enabled: true }"
+      (onSelectionChanged)="onDocumentSelectionChanged($event)"
+      class="documents-grid">
+      
+      <dxi-column type="selection" [width]="50"></dxi-column>
+      
+      <dxi-column 
+        dataField="name" 
+        caption="Document Name" 
+        [width]="300"
+        [allowFiltering]="true"
+        [allowSorting]="true">
+        <div *dxTemplate="let data of 'cellTemplate'">
+          <a href="#" 
+             class="document-link" 
+             (click)="openDocumentViewer(data.data); $event.preventDefault()">
+            {{ data.value }}
+          </a>
+        </div>
+      </dxi-column>
+      
+      <dxi-column 
+        dataField="type" 
+        caption="Type" 
+        [width]="100"
+        [allowFiltering]="true"
+        [allowSorting]="true">
+        <div *dxTemplate="let data of 'cellTemplate'">
+          <span class="type-badge type-{{ data.value.toLowerCase() }}">
+            {{ data.value }}
+          </span>
+        </div>
+      </dxi-column>
+      
+      <dxi-column 
+        dataField="dateCreated" 
+        caption="Date Created" 
+        [width]="140" 
+        dataType="datetime" 
+        format="yyyy-MM-dd HH:mm"
+        [allowFiltering]="true"
+        [allowSorting]="true">
+      </dxi-column>
+      
+      <dxi-column 
+        dataField="versionNo" 
+        caption="Version" 
+        [width]="80" 
+        [alignment]="'center'"
+        [allowFiltering]="true"
+        [allowSorting]="true">
+      </dxi-column>
+      
+      <dxi-column 
+        dataField="status" 
+        caption="Status" 
+        [width]="120"
+        [allowFiltering]="true"
+        [allowSorting]="true">
+        <div *dxTemplate="let data of 'cellTemplate'">
+          <span [innerHTML]="formatStatus(data.value)"></span>
+        </div>
+      </dxi-column>
+      
+      <dxi-column 
+        dataField="createdBy" 
+        caption="Created By" 
+        [width]="120"
+        [allowFiltering]="true"
+        [allowSorting]="true">
+      </dxi-column>
+      
+      <dxi-column 
+        dataField="reviewedBy" 
+        caption="Reviewed By" 
+        [width]="120"
+        [allowFiltering]="true"
+        [allowSorting]="true">
+      </dxi-column>
+      
+      <dxi-column 
+        caption="Actions" 
+        [width]="150" 
+        [allowSorting]="false"
+        [allowFiltering]="false">
+        <div *dxTemplate="let data of 'cellTemplate'">
+          <div class="action-buttons">
+            <dx-button
+              *ngFor="let action of getDocumentActions(data.data)"
+              [text]="action"
+              type="normal"
+              [stylingMode]="action === 'Review' ? 'contained' : 'text'"
+              (onClick)="onDocumentAction(action, data.data)"
+              class="action-btn"
+              [class.review-btn]="action === 'Review'"
+              [class.edit-btn]="action === 'Edit'"
+              [class.view-btn]="action === 'View'">
+            </dx-button>
+          </div>
+        </div>
+      </dxi-column>
+    </dx-data-grid>
+  </div>
+
+  <!-- New Document Popup -->
+  <dx-popup
+    [(visible)]="showNewDocumentPopup"
+    [width]="500"
+    [height]="350"
+    title="Create New Document"
+    [showCloseButton]="true"
+    [dragEnabled]="false"
+    [resizeEnabled]="false">
+    
+    <div class="new-document-form">
+      <div class="form-field">
+        <label>Document Name *</label>
+        <dx-text-box
+          [(value)]="newDocumentForm.name"
+          placeholder="Enter document name"
+          class="form-input">
+        </dx-text-box>
+      </div>
+      
+      <div class="form-field">
+        <label>Document Type *</label>
+        <dx-select-box
+          [dataSource]="documentTypes"
+          displayExpr="text"
+          valueExpr="value"
+          [(value)]="newDocumentForm.type"
+          class="form-input">
+        </dx-select-box>
+      </div>
+      
+      <div class="form-actions">
+        <dx-button
+          text="Cancel"
+          type="normal"
+          (onClick)="showNewDocumentPopup = false"
+          class="cancel-btn">
+        </dx-button>
+        <dx-button
+          text="Create Document"
+          type="default"
+          (onClick)="createNewDocument()"
+          [disabled]="!newDocumentForm.name || !newDocumentForm.type"
+          class="create-btn">
+        </dx-button>
+      </div>
+    </div>
+  </dx-popup>
+
+  <!-- Document Viewer/Editor Popup -->
+  <dx-popup
+    [(visible)]="showDocumentViewer"
+    [width]="'90%'"
+    [height]="'90%'"
+    [title]="selectedDocument?.name || 'Document Viewer'"
+    [showCloseButton]="true"
+    [dragEnabled]="true"
+    [resizeEnabled]="true">
+    
+    <div class="document-viewer" *ngIf="selectedDocument">
+      <div class="document-toolbar">
+        <div class="document-info">
+          <span class="doc-version">{{ selectedDocument.versionNo }}</span>
+          <span class="doc-status" [innerHTML]="formatStatus(selectedDocument.status)"></span>
+        </div>
+        <div class="document-actions">
+          <dx-button
+            *ngIf="selectedDocument.status === 'Draft'"
+            text="Submit for Review"
+            type="default"
+            icon="check"
+            (onClick)="submitForReview(selectedDocument)"
+            class="submit-btn">
+          </dx-button>
+          <dx-button
+            *ngIf="selectedDocument.status === 'Accepted'"
+            text="Mark as Completed"
+            type="success"
+            icon="check"
+            (onClick)="markAsCompleted(selectedDocument)"
+            class="complete-btn">
+          </dx-button>
+        </div>
+      </div>
+      
+      <div class="document-content">
+        <div 
+          class="document-editor"
+          [innerHTML]="selectedDocument.content"
+          [contentEditable]="selectedDocument.status === 'Draft' || selectedDocument.status === 'Rejected'"
+          (input)="selectedDocument.content = $any($event.target).innerHTML">
+        </div>
+      </div>
+    </div>
+  </dx-popup>
+
+  <!-- Review Popup -->
+  <dx-popup
+    [(visible)]="showReviewPopup"
+    [width]="500"
+    [height]="350"
+    title="Review Document"
+    [showCloseButton]="true"
+    [dragEnabled]="false"
+    [resizeEnabled]="false">
+    
+    <div class="review-form" *ngIf="selectedDocument">
+      <div class="review-document-info">
+        <h4>{{ selectedDocument.name }}</h4>
+        <p>Created by: {{ selectedDocument.createdBy }}</p>
+        <p>Version: {{ selectedDocument.versionNo }}</p>
+      </div>
+      
+      <div class="form-field">
+        <label>Review Decision *</label>
+        <dx-select-box
+          [dataSource]="reviewActions"
+          displayExpr="text"
+          valueExpr="value"
+          [(value)]="reviewForm.action"
+          class="form-input">
+        </dx-select-box>
+      </div>
+      
+      <div class="form-field">
+        <label>Comments</label>
+        <dx-text-area
+          [(value)]="reviewForm.comments"
+          [height]="100"
+          placeholder="Enter review comments..."
+          class="form-input">
+        </dx-text-area>
+      </div>
+      
+      <div class="form-actions">
+        <dx-button
+          text="Cancel"
+          type="normal"
+          (onClick)="showReviewPopup = false"
+          class="cancel-btn">
+        </dx-button>
+        <dx-button
+          text="Submit Review"
+          type="default"
+          (onClick)="submitReview()"
+          class="submit-review-btn">
+        </dx-button>
+      </div>
+    </div>
+  </dx-popup>
+</div>

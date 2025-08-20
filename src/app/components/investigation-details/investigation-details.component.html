@@ -1,0 +1,366 @@
+<!-- src/app/components/investigation-details/investigation-details.component.html (Updated) -->
+<div class="investigation-details-content">
+  <div *ngIf="investigation" class="investigation-info">
+    <h4>Investigation Details</h4>
+    
+    <div class="investigation-summary-grid">
+      <dx-data-grid
+        [dataSource]="investigationGridData"
+        [showBorders]="true"
+        [rowAlternationEnabled]="true"
+        [columnAutoWidth]="true"
+        [showRowLines]="true"
+        [selection]="{ mode: 'multiple' }"
+        class="investigation-grid">
+        
+        <dxi-column type="selection" [width]="50"></dxi-column>
+        <dxi-column dataField="filingNumber" caption="Filing #" [width]="100">
+          <div *dxTemplate="let data of 'cellTemplate'">
+            <a href="#" class="filing-link">{{ data.value }}</a>
+          </div>
+        </dxi-column>
+        <dxi-column dataField="investigatedParty" caption="Investigated Party" [width]="120"></dxi-column>
+        <dxi-column dataField="roleType" caption="Role Type" [width]="100"></dxi-column>
+        <dxi-column dataField="regulatedParty" caption="Regulated Party" [width]="120"></dxi-column>
+        <dxi-column dataField="sponsor" caption="Sponsor" [width]="100"></dxi-column>
+        <dxi-column dataField="investigationType" caption="Investigation Type" [width]="150"></dxi-column>
+        <dxi-column dataField="dateCreated" caption="Date Created" [width]="120" dataType="datetime" format="yyyy-MM-dd HH:mm"></dxi-column>
+        <dxi-column dataField="allocatedTo" caption="Allocated To" [width]="120"></dxi-column>
+        <dxi-column dataField="stage" caption="Stage" [width]="100">
+          <div *dxTemplate="let data of 'cellTemplate'">
+            <span class="stage-badge">{{ data.value }}</span>
+          </div>
+        </dxi-column>
+        <dxi-column dataField="status" caption="Status" [width]="80">
+          <div *dxTemplate="let data of 'cellTemplate'">
+            <span [innerHTML]="formatStatus(data.value)"></span>
+          </div>
+        </dxi-column>
+        <dxi-column dataField="dateClosed" caption="Date Closed" [width]="120" dataType="datetime" format="yyyy-MM-dd HH:mm"></dxi-column>
+      </dx-data-grid>
+    </div>
+
+    <!-- Investigation Tabs -->
+    <dx-tab-panel
+      [dataSource]="investigationTabs"
+      [selectedIndex]="0"
+      [animationEnabled]="true"
+      [swipeEnabled]="false"
+      class="investigation-tabs">
+      
+      <!-- Details Tab -->
+      <div *dxTemplate="let tabData of 'detailsTab'">
+        <div class="details-content">
+          <!-- Investigation Information -->
+          <div class="investigation-form">
+            <div class="form-section">
+              <h5>Investigation Information</h5>
+              <div class="form-grid">
+                <div class="form-row">
+                  <label>Investigation ID:</label>
+                  <span class="value">{{ investigationGridData[0]?.filingNumber || '' }}</span>
+                </div>
+                <div class="form-row">
+                  <label>Case ID:</label>
+                  <span class="value case-link">C1130</span>
+                </div>
+                <div class="form-row">
+                  <label>Investigated Party:</label>
+                  <span class="value">{{ investigationGridData[0]?.investigatedParty || '' }}</span>
+                </div>
+                <div class="form-row">
+                  <label>Role Type:</label>
+                  <span class="value">Custody and Settlement Member</span>
+                </div>
+                <div class="form-row">
+                  <label>Issuer:</label>
+                  <span class="value">J P Morgan Equities SA (Pty) Ltd</span>
+                </div>
+                <div class="form-row">
+                  <label>Contact/Officer/Sub:</label>
+                  <span class="value">Andre Potgieter</span>
+                </div>
+                <div class="form-row">
+                  <label>Sponsor/DA:</label>
+                  <span class="value">{{ investigationGridData[0]?.sponsor || '' }}</span>
+                </div>
+                <div class="form-row">
+                  <label>Listing Type:</label>
+                  <span class="value"></span>
+                </div>
+                <div class="form-row">
+                  <label>Exchange:</label>
+                  <span class="value"></span>
+                </div>
+                <div class="form-row">
+                  <label>Market Segmentation:</label>
+                  <span class="value"></span>
+                </div>
+                <div class="form-row">
+                  <label>Listing Requirements:</label>
+                  <span class="value"></span>
+                </div>
+                <div class="form-row">
+                  <label>Board:</label>
+                  <span class="value"></span>
+                </div>
+                <div class="form-row">
+                  <label>Created Date:</label>
+                  <span class="value">{{ investigationGridData[0]?.dateCreated | date:'yyyy-MM-dd HH:mm' }}</span>
+                </div>
+                <div class="form-row">
+                  <label>Closed Date:</label>
+                  <span class="value">{{ investigationGridData[0]?.dateClosed | date:'yyyy-MM-dd HH:mm' }}</span>
+                </div>
+                <div class="form-row">
+                  <label>Created By:</label>
+                  <span class="value"></span>
+                </div>
+                <div class="form-row">
+                  <label>Allocated To:</label>
+                  <span class="value">{{ investigationGridData[0]?.allocatedTo || '' }}</span>
+                </div>
+                <div class="form-row">
+                  <label>Date Allocated:</label>
+                  <span class="value"></span>
+                </div>
+                <div class="form-row">
+                  <label>Second Reader:</label>
+                  <span class="value"></span>
+                </div>
+                <div class="form-row">
+                  <label>SLA:</label>
+                  <span class="value"></span>
+                </div>
+                <div class="form-row">
+                  <label>Stage:</label>
+                  <span class="value stage-badge">{{ investigationGridData[0]?.stage || '' }}</span>
+                </div>
+                <div class="form-row">
+                  <label>Status:</label>
+                  <span class="value" [innerHTML]="formatStatus(investigationGridData[0]?.status || '')"></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Description Section -->
+            <div class="form-section description-section">
+              <h5>Description</h5>
+              <dx-text-area
+                [(value)]="description"
+                [height]="80"
+                [readOnly]="true"
+                class="description-field">
+              </dx-text-area>
+            </div>
+
+            <!-- Priority Section -->
+            <div class="form-section priority-section">
+              <h5>Priority</h5>
+              <dx-select-box
+                [dataSource]="priorityOptions"
+                displayExpr="text"
+                valueExpr="value"
+                [(value)]="priority"
+                [readOnly]="true"
+                class="priority-field">
+              </dx-select-box>
+            </div>
+
+            <!-- Investigation Type Section -->
+            <div class="form-section">
+              <h5>Investigation Type</h5>
+              <div class="investigation-type-row">
+                <span class="investigation-type-value">{{ investigationGridData[0]?.investigationType || '' }}</span>
+              </div>
+            </div>
+
+            <!-- Event Types Section -->
+            <div class="form-section">
+              <h5>Event Types</h5>
+              <div class="event-types-container">
+                <div class="event-types-input-row">
+                  <dx-select-box
+                    [dataSource]="eventTypeOptions"
+                    displayExpr="text"
+                    valueExpr="value"
+                    placeholder="Please Select Event Type"
+                    [(value)]="selectedEventType"
+                    class="event-type-select">
+                  </dx-select-box>
+                  <dx-button
+                    text="Add"
+                    type="default"
+                    (onClick)="addEventType()"
+                    class="add-event-btn">
+                  </dx-button>
+                </div>
+                
+                <!-- Event Types Grid -->
+                <div class="event-types-grid" *ngIf="eventTypes.length > 0">
+                  <dx-data-grid
+                    [dataSource]="eventTypes"
+                    [showBorders]="true"
+                    [selection]="{ mode: 'multiple' }"
+                    [columnAutoWidth]="true">
+                    <dxi-column type="selection" [width]="50"></dxi-column>
+                    <dxi-column dataField="name" caption="Event Type"></dxi-column>
+                  </dx-data-grid>
+                  <dx-button
+                    text="Delete Selected"
+                    type="danger"
+                    (onClick)="deleteSelectedEventTypes()"
+                    class="delete-selected-btn">
+                  </dx-button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Complainant Section -->
+            <div class="form-section complainant-section">
+              <h5>Complainant</h5>
+              <div class="complainant-form-grid">
+                <div class="form-row">
+                  <label>Name</label>
+                  <dx-text-box
+                    [(value)]="complainantForm.name"
+                    placeholder="Enter name"
+                    class="form-control">
+                  </dx-text-box>
+                </div>
+                <div class="form-row">
+                  <label>Surname</label>
+                  <dx-text-box
+                    [(value)]="complainantForm.surname"
+                    placeholder="Enter surname"
+                    class="form-control">
+                  </dx-text-box>
+                </div>
+                <div class="form-row">
+                  <label>Email (*)</label>
+                  <dx-text-box
+                    [(value)]="complainantForm.email"
+                    placeholder="Enter email..."
+                    class="form-control email-field">
+                  </dx-text-box>
+                </div>
+                <div class="form-row">
+                  <label>Relationship Type</label>
+                  <dx-select-box
+                    [dataSource]="relationshipTypeOptions"
+                    displayExpr="text"
+                    valueExpr="value"
+                    placeholder="Please Select Relationship Type"
+                    [(value)]="complainantForm.relationshipType"
+                    class="form-control">
+                  </dx-select-box>
+                </div>
+                <div class="form-row">
+                  <label>Contact Number</label>
+                  <div class="contact-number-row">
+                    <dx-text-box
+                      [(value)]="complainantForm.contactCode"
+                      [width]="60"
+                      class="contact-code-field">
+                    </dx-text-box>
+                    <dx-text-box
+                      [(value)]="complainantForm.contactNumber"
+                      placeholder="Contact number"
+                      class="contact-number-field">
+                    </dx-text-box>
+                  </div>
+                </div>
+                <div class="form-row entity-row">
+                  <label>Entity</label>
+                  <div class="entity-input-row">
+                    <dx-text-box
+                      [(value)]="complainantForm.entity"
+                      placeholder="Enter entity"
+                      class="entity-field">
+                    </dx-text-box>
+                    <dx-button
+                      text="Add"
+                      type="default"
+                      (onClick)="addComplainant()"
+                      class="add-entity-btn">
+                    </dx-button>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="no-complainants" *ngIf="complainants.length === 0">
+                No complainants have been captured yet
+              </div>
+              
+              <!-- Complainants List -->
+              <div class="complainants-list" *ngIf="complainants.length > 0">
+                <dx-data-grid
+                  [dataSource]="complainants"
+                  [showBorders]="true"
+                  [columnAutoWidth]="true">
+                  <dxi-column dataField="name" caption="Name"></dxi-column>
+                  <dxi-column dataField="surname" caption="Surname"></dxi-column>
+                  <dxi-column dataField="email" caption="Email"></dxi-column>
+                  <dxi-column dataField="relationshipType" caption="Relationship"></dxi-column>
+                  <dxi-column dataField="contactNumber" caption="Contact"></dxi-column>
+                  <dxi-column dataField="entity" caption="Entity"></dxi-column>
+                </dx-data-grid>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Documents Tab - Now using Document Management Component -->
+      <div *dxTemplate="let tabData of 'documentsTab'">
+        <div class="documents-tab-content">
+          <app-document-management></app-document-management>
+        </div>
+      </div>
+
+      <!-- Meetings Tab -->
+      <div *dxTemplate="let tabData of 'meetingsTab'">
+        <div class="meetings-content">
+          <h5>Meetings & Conferences</h5>
+          <p>Meeting functionality will be implemented here.</p>
+          <div class="placeholder-info">
+            <p>This section will include:</p>
+            <ul>
+              <li>Schedule new meetings and conferences</li>
+              <li>View upcoming and past meetings</li>
+              <li>Meeting minutes and recordings</li>
+              <li>Participant management</li>
+              <li>Integration with calendar systems</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Communications Tab -->
+      <div *dxTemplate="let tabData of 'communicationsTab'">
+        <div class="communications-content">
+          <h5>Communications & Correspondence</h5>
+          <p>Communications functionality will be implemented here.</p>
+          <div class="placeholder-info">
+            <p>This section will include:</p>
+            <ul>
+              <li>Email correspondence tracking</li>
+              <li>Phone call logs</li>
+              <li>Internal and external communications</li>
+              <li>Communication templates</li>
+              <li>Automated notifications</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </dx-tab-panel>
+  </div>
+  
+  <div *ngIf="!investigation" class="no-investigation">
+    <div class="no-investigation-icon">
+      <i class="dx-icon-search"></i>
+    </div>
+    <h4>No Investigation Data</h4>
+    <p>No investigation information available for this case</p>
+  </div>
+</div>
