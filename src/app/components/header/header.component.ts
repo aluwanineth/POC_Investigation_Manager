@@ -42,5 +42,5 @@ import { CommonModule } from '@angular/common';
 })
 export class HeaderComponent {
   @Input() title: string = 'Case Management System';
-  @Input() currentUser: string = 'Current User';
+  @Input() currentUser: string = 'Aluwani Nethavhakone';
 }

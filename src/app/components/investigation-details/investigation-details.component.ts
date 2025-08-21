@@ -10,8 +10,9 @@ import {
   DxTextAreaModule,
   DxButtonModule
 } from 'devextreme-angular';
-import { InvestigationData } from '../../models/case.models';
+import { CaseData, InvestigationData } from '../../models/case.models';
 import { DocumentManagementComponent } from '../document-management/document-management.component';
+import { MeetingSchedulerComponent } from '../meeting/meeting.component';
 
 @Component({
   selector: 'app-investigation-details',
@@ -25,7 +26,8 @@ import { DocumentManagementComponent } from '../document-management/document-man
     DxSelectBoxModule,
     DxTextAreaModule,
     DxButtonModule,
-    DocumentManagementComponent
+    DocumentManagementComponent,
+    MeetingSchedulerComponent
   ],
   templateUrl: './investigation-details.component.html',
   styleUrls: ['./investigation-details.component.css']
@@ -34,13 +36,16 @@ export class InvestigationDetailsComponent implements OnChanges {
   @Input() investigation: InvestigationData | null = null;
 
   selectedInvestigation: any = null;
+
+  @Input() selectedCase: CaseData | null = null;
+
   
   // Tab configuration - Updated to include Documents tab
   investigationTabs = [
     { title: 'Details', template: 'detailsTab' },
-    { title: 'Documents', template: 'documentsTab' },
+    { title: 'Communications', template: 'communicationTab' },
     { title: 'Meetings', template: 'meetingsTab' },
-    { title: 'Communications', template: 'communicationsTab' }
+    { title: 'List Requirements', template: 'listRequirementsTab' }
   ];
 
   // Investigation grid data matching the screenshot
@@ -57,11 +62,24 @@ export class InvestigationDetailsComponent implements OnChanges {
       stage: 'New Process',
       status: 'New',
       dateClosed: null
+    },
+    {
+      filingNumber: '25081131-B',
+      investigatedParty: 'Contact',
+      roleType: 'Contact',
+      regulatedParty: 'Aluwani Potgieter',
+      sponsor: '',
+      investigationType: 'Additional listing - New listing - AltX',
+      dateCreated: new Date('2025-08-14T15:20:00'),
+      allocatedTo: '',
+      stage: 'New Process',
+      status: 'New',
+      dateClosed: null
     }
   ];
 
   // Form properties for the details section
-  description = 'Hjf';
+  description = 'Testing';
   priority = 'High';
 
   // Form data
@@ -71,7 +89,7 @@ export class InvestigationDetailsComponent implements OnChanges {
     surname: '',
     email: '',
     relationshipType: '',
-    contactCode: '+',
+    contactCode: '+27',
     contactNumber: '',
     entity: ''
   };

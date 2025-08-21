@@ -69,6 +69,8 @@ import { CaseData } from '../../models/case.models';
             [selection]="{ mode: 'single' }"
             [hoverStateEnabled]="true"
             [focusedRowEnabled]="true"
+            [filterRow]="{ visible: true }"
+            [headerFilter]="{ visible: true }"
             (onSelectionChanged)="onSelectionChanged($event)"
             (onRowClick)="onRowClick($event)"
             class="cases-grid">

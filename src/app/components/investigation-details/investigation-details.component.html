@@ -312,7 +312,7 @@
       </div>
 
       <!-- Documents Tab - Now using Document Management Component -->
-      <div *dxTemplate="let tabData of 'documentsTab'">
+      <div *dxTemplate="let tabData of 'communicationTab'">
         <div class="documents-tab-content">
           <app-document-management></app-document-management>
         </div>
@@ -320,24 +320,14 @@
 
       <!-- Meetings Tab -->
       <div *dxTemplate="let tabData of 'meetingsTab'">
-        <div class="meetings-content">
-          <h5>Meetings & Conferences</h5>
-          <p>Meeting functionality will be implemented here.</p>
-          <div class="placeholder-info">
-            <p>This section will include:</p>
-            <ul>
-              <li>Schedule new meetings and conferences</li>
-              <li>View upcoming and past meetings</li>
-              <li>Meeting minutes and recordings</li>
-              <li>Participant management</li>
-              <li>Integration with calendar systems</li>
-            </ul>
-          </div>
-        </div>
+        <app-meeting-scheduler
+                [selectedCaseNo]="selectedCase?.caseNo || ''"
+                [selectedCaseId]="selectedCase?.id || ''">
+        </app-meeting-scheduler>
       </div>
 
       <!-- Communications Tab -->
-      <div *dxTemplate="let tabData of 'communicationsTab'">
+      <div *dxTemplate="let tabData of 'listRequirementsTab'">
         <div class="communications-content">
           <h5>Communications & Correspondence</h5>
           <p>Communications functionality will be implemented here.</p>

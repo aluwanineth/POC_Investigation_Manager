@@ -102,7 +102,7 @@ export class App implements OnInit, OnDestroy {
   
   // Application state
   title = 'Case Management System';
-  currentUser = 'Current User';
+  currentUser = 'Aluwani Nethavhakone';
   createCaseDialogVisible = false;
   
   selectedCase: CaseData | null = null;

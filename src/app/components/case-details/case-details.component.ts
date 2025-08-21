@@ -54,14 +54,6 @@ import { MeetingSchedulerComponent } from '../meeting/meeting.component';
                 [investigation]="selectedInvestigation">
               </app-investigation-details>
             </div>
-
-            <!-- Meetings Tab -->
-            <div *dxTemplate="let tabData of 'meetingsTab'">
-              <app-meeting-scheduler
-                [selectedCaseNo]="selectedCase?.caseNo || ''"
-                [selectedCaseId]="selectedCase?.id || ''">
-              </app-meeting-scheduler>
-            </div>
           </dx-tab-panel>
         </div>
       </div>
@@ -168,8 +160,7 @@ export class CaseDetailsComponent implements OnChanges {
 
   caseDetailTabs = [
     { title: 'Case', template: 'caseDetailsTab' },
-    { title: 'Investigation', template: 'investigationDetailsTab' },
-    { title: 'Meetings', template: 'meetingsTab' }
+    { title: 'Investigation', template: 'investigationDetailsTab' }
   ];
 
   ngOnChanges(changes: SimpleChanges) {
