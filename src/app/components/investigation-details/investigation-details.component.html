@@ -10,7 +10,9 @@
         [rowAlternationEnabled]="true"
         [columnAutoWidth]="true"
         [showRowLines]="true"
-        [selection]="{ mode: 'multiple' }"
+        [selection]="{ mode: 'single' }"
+        [filterRow]="{ visible: true }"
+      [headerFilter]="{ visible: true }"
         class="investigation-grid">
         
         <dxi-column type="selection" [width]="50"></dxi-column>
